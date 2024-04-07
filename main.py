@@ -9,19 +9,40 @@ rozliseniObrazovky = (800,1000)
 okno = pygame.display.set_mode(rozliseniObrazovky)
 pygame.display.set_caption("SPŠsteam") #capiton on top left
 
-
 #sets fonts
 pygame.init()
-Verdana29 = pygame.font.SysFont("Verdana", 29)
-Verdana22 = pygame.font.SysFont("Verdana", 22)
 
-''' print(pygame.font.get_fonts())
-    prints all availible fonts  '''
+def FontChoossenSize(font, size):
+    return pygame.font.SysFont(font, size)
+# returns font with size and name
+
+''' print(pygame.font.get_fonts()) '''
+    #prints all availible fonts  
 
 #Images
 profilovka = pygame.image.load("C:/Users/Ok I pull up/Desktop/vj/spssteam-napad/profilePicture.png")
-profilovka = pygame.transform.scale(okno, (100,100))
+profilovka = pygame.transform.scale(profilovka, (100,100))
 
+#colours
+lightBlue = (102,140,244) #background
+steamBlue = (42,71,94) # top bar color
+buttonColour = (24,48,66)
+
+#inputs
+jmeno = input("Zadej svoje jméno: ")[:9]
+#character limit of 9
+
+
+# HRY
+#counts all .py fies in the dirrectory bellow
+pyCounter = 0
+for root, dirs, files in os.walk("C:/Users/Ok I pull up/Desktop/vj/spssteam-napad/HRY"):
+    for file in files:
+        if file.endswith(".py"):
+            pyCounter += 1
+
+
+#======================================================LOOP==========================================================================
 run = True
 while run:
     for event in pygame.event.get():
@@ -32,26 +53,61 @@ while run:
     stisknuteKlavesy = pygame.key.get_pressed()
     mousePosition = pygame.mouse.get_pos()
 
-    okno.fill((102,140,244))
 
-    topBar = pygame.draw.rect(okno, (42,71,94), (0,0, rozliseniObrazovky[1], 110))
+    okno.fill(lightBlue)
+
+    topBar = pygame.draw.rect(okno, steamBlue, (0,0, rozliseniObrazovky[1], 110))
 
     #Renders buttons
-    listHerButton = pygame.draw.rect(okno, (24,48,66), (30,30, 150,50), 2, 1) #draws box for listHer
-    listHerText = Verdana29.render("Knihovna", False, (0,0,0)) #renders text
+    listHerButtonRect = pygame.Rect(30,30, 150,50)
+    listHerButton = pygame.draw.rect(okno, buttonColour, listHerButtonRect, 2, 1) #draws box for listHer
+    listHerText = FontChoossenSize("Verdana", 29).render("Knihovna", True, (0,0,0)) #renders text
+    # True means anti-allising (text won't be jagged)
 
-    leaderboardButton = pygame.draw.rect(okno, (24,48,66), (210,30, 150,50), 2, 1) #draws box for leaderboard
-    leaderboardText = Verdana22.render("Leaderboard", True, (0,0,0))
+    leaderboardButtonRect = pygame.Rect(210,30, 150,50)
+    leaderboardButton = pygame.draw.rect(okno, buttonColour, leaderboardButtonRect, 2, 1) #draws box for leaderboard
+    leaderboardText = FontChoossenSize("Verdana", 22).render("Leaderboard", True, (0,0,0))
 
-    ObchodButton = pygame.draw.rect(okno, (24,48,66), (390,30, 150,50), 2, 1) 
-    obchodText = Verdana29.render("Obchod", True, (0,0,0))
+    obchodButtonRect = pygame.Rect(390,30, 150,50)
+    ObchodButton = pygame.draw.rect(okno, buttonColour, obchodButtonRect, 2, 1) 
+    obchodText = FontChoossenSize("Verdana", 29).render("Obchod", True, (0,0,0))
 
     #TopBar Profile
     okno.blit(profilovka, (560, 5))
+    profilovkaRect = pygame.Rect(560, 5, 100,100)
+    pygame.draw.rect(okno, (buttonColour), (560, 5, 100, 100), 5, 1) 
+    #okraj okolo profilovky
+
+    #profilovka - jméno
+    jmenoRect = pygame.Rect(670, 15, 120, 25)
+    jmenoFont = FontChoossenSize("Verdana", 20).render(jmeno, True, (0,0,0))
+    okno.blit(jmenoFont, (670, 15))
 
     #RENDERS FONT
     okno.blit(listHerText, (38,37)) #blit listHer text
     okno.blit(leaderboardText, (216, 41))
     okno.blit(obchodText, (407, 37))
+
+    #mouse
+    mousePositionRect = pygame.Rect(mousePosition[0]-1, mousePosition[1]-1, 3, 3)
+    pygame.draw.rect(okno, (255,0,0), mousePositionRect)
+
+    if event.type == pygame.MOUSEBUTTONUP:
+        if pygame.Rect.colliderect(mousePositionRect, listHerButtonRect):
+            print("Klikl jsi na Knihovnu")
+        elif pygame.Rect.colliderect(mousePositionRect, leaderboardButtonRect):
+            print("Klikl jsi na leaderboard")
+        elif pygame.Rect.colliderect(mousePositionRect, obchodButtonRect):
+            print("Klikl jsi na obchod")
+        elif pygame.Rect.colliderect(mousePositionRect, profilovkaRect) or pygame.Rect.colliderect(mousePositionRect, jmenoRect):
+            print("Klikl jsi na profil")
+
+    print(f"X: {mousePosition[0]}   Y: {mousePosition[1]}")
+
+    #hry
+    for pocetHer in range(pyCounter):
+        listHerRect = []
+        listHerRect.append(pygame.Rect(40, 150, 2, 2))
+
 
     pygame.display.update()
