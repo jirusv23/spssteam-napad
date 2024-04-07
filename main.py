@@ -1,4 +1,4 @@
-import pygame, os, sys
+import pygame, os, sys, math
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 #open the window in the middle of the screen
@@ -112,6 +112,7 @@ while run:
 
     #boxy pro hry
     for pocetHer in range(pyCounter):
+
         print(listHerRect)
         pygame.draw.rect(okno, buttonColour, listHerRect[pocetHer], 2, 1)
 
