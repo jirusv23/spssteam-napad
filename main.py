@@ -29,7 +29,8 @@ steamBlue = (42,71,94) # top bar color
 buttonColour = (24,48,66)
 
 #inputs
-jmeno = input("Zadej svoje jméno: ")[:9]
+jmeno = "Ivan"
+#jmeno = input("Zadej svoje jméno: ")[:9]
 #character limit of 9
 
 
@@ -39,9 +40,13 @@ pyCounter = 0
 for root, dirs, files in os.walk("C:/Users/Ok I pull up/Desktop/vj/spssteam-napad/HRY"):
     for file in files:
         if file.endswith(".py"):
-            pyCounter += 1
+            pyCounter += 2
 
-
+listHerRect = []
+for pocetHer in range(pyCounter):   
+    listHerRect.append(pygame.Rect(40, 120*(pocetHer+1) + 100*(pocetHer+1), 720, 200))
+    print(listHerRect)
+    
 #======================================================LOOP==========================================================================
 run = True
 while run:
@@ -102,12 +107,19 @@ while run:
         elif pygame.Rect.colliderect(mousePositionRect, profilovkaRect) or pygame.Rect.colliderect(mousePositionRect, jmenoRect):
             print("Klikl jsi na profil")
 
-    print(f"X: {mousePosition[0]}   Y: {mousePosition[1]}")
+    #print(f"X: {mousePosition[0]}   Y: {mousePosition[1]}")
 
-    #hry
+
+    #boxy pro hry
     for pocetHer in range(pyCounter):
-        listHerRect = []
-        listHerRect.append(pygame.Rect(40, 150, 2, 2))
+        print(listHerRect)
+        pygame.draw.rect(okno, buttonColour, listHerRect[pocetHer], 2, 1)
 
+    if len(listHerRect) > 3:
+        vlevoSipkaRect = pygame.Rect(340, 930 ,60 ,60)
+        pravoSipkaRect = pygame.Rect(440, 930 ,60 ,60)
+
+        sipkaVlevo = pygame.draw.rect(okno, buttonColour, vlevoSipkaRect, 3 ,1)
+        sipkaPravo = pygame.draw.rect(okno, buttonColour, pravoSipkaRect, 3, 1)
 
     pygame.display.update()
